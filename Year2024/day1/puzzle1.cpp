@@ -1,5 +1,6 @@
 #include <fstream>
 #include <iostream>
+#include "utils.h"
 
 using namespace std;
 
@@ -16,8 +17,7 @@ int year2024_day1_puzzle1() {
     int potions = 0;
     getline(f, s);
     for (const char& c : s) {
-        if (c == 'B') potions++;
-        else if (c == 'C') potions += 3;
+        potions += processChar(c);
     }
 
     cout << potions << endl;
