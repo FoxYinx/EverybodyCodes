@@ -4,7 +4,7 @@
 using namespace std;
 
 int year2024_day1_puzzle1() {
-    ifstream f("ressources/Year2024/day1.txt");
+    ifstream f("ressources/Year2024/day1/part1.txt");
 
     if (!f.is_open()) {
         cerr << "Error opening file" << endl;
@@ -13,9 +13,13 @@ int year2024_day1_puzzle1() {
     cout << "File successfully opened!" << endl;
 
     string s;
-    while (getline(f, s)) {
-
+    int potions = 0;
+    getline(f, s);
+    for (const char& c : s) {
+        if (c == 'B') potions++;
+        if (c == 'C') potions += 3;
     }
 
+    cout << potions << endl;
     return 0;
 }

@@ -23,7 +23,7 @@ int main() {
     cin >> year;
     cout << "Enter which day: ";
     cin >> day;
-    cout << "Enter which puzzle (1 or 2): ";
+    cout << "Enter which part (1, 2 or 3): ";
     cin >> puzzle;
     if (const string key = to_string(year) + "-" + to_string(day) + "-" + to_string(puzzle); functions.contains(key)) {
         std::cout << "Running Year " << year << " Day " << day << " Part " << puzzle << "...\n";
