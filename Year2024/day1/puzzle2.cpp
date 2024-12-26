@@ -1,9 +1,8 @@
 #include <fstream>
 #include <iostream>
+#include "utils.h"
 
 using namespace std;
-
-int processChar(const char& c);
 
 int year2024_day1_puzzle2() {
     ifstream f("ressources/Year2024/day1/part2.txt");
@@ -26,12 +25,5 @@ int year2024_day1_puzzle2() {
     }
 
     cout << potions << endl;
-    return 0;
-}
-
-int processChar(const char& c) {
-    if (c == 'B') return 1;
-    if (c == 'C') return 3;
-    if (c == 'D') return 5;
     return 0;
 }
