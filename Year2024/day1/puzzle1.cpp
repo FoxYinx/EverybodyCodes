@@ -17,7 +17,7 @@ int year2024_day1_puzzle1() {
     getline(f, s);
     for (const char& c : s) {
         if (c == 'B') potions++;
-        if (c == 'C') potions += 3;
+        else if (c == 'C') potions += 3;
     }
 
     cout << potions << endl;
