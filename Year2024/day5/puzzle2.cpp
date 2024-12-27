@@ -1,7 +1,9 @@
 #include <fstream>
 #include <iostream>
 #include <array>
+#include <cstdint>
 #include <vector>
+#include <map>
 
 #define COLUMNNB 4
 #define ROUNDNB 10
@@ -20,13 +22,15 @@ int year2024_day5_puzzle2() {
     string s;
     array<vector<int>, COLUMNNB> clappers;
     while (getline(f, s)) {
-        for (int i = 0; i < COLUMNNB; i++) clappers[i].push_back(stoi(&s[i * 2]));
+        for (int i = 0; i < COLUMNNB; i++) clappers[i].push_back(stoi(&s[i * 3]));
     }
 
-    cout << "Round  Number" << endl;
-    for (int round = 0; round < ROUNDNB; round++) {
+    map<uint64_t, int> repetitions;
+
+    for (int round = 0;; round++) {
         int clapperValue = clappers[round % COLUMNNB].front();
-        int clapper = clappers[round % COLUMNNB].front() % (clappers[(round + 1) % COLUMNNB].size() * 2 + 1);
+        int clapper = clappers[round % COLUMNNB].front() % (clappers[(round + 1) % COLUMNNB].size() * 2);
+        if (clapper == 0) clapper = clappers[(round + 1) % COLUMNNB].size() * 2;
         clappers[round % COLUMNNB].erase(clappers[round % COLUMNNB].begin());
         if (clapper > clappers[(round + 1) % COLUMNNB].size()) {
             clappers[(round + 1) % COLUMNNB].insert(clappers[(round + 1) % COLUMNNB].end() - (clapper - 1 - clappers[(round + 1) % COLUMNNB].size()), clapperValue);
@@ -34,11 +38,19 @@ int year2024_day5_puzzle2() {
             clappers[(round + 1) % COLUMNNB].insert(clappers[(round + 1) % COLUMNNB].begin() + clapper - 1, clapperValue);
         }
 
-        cout << round + 1 << ":     ";
+        string temp;
         for (const auto& c : clappers) {
-            cout << c[0] << " ";
+            temp += to_string(c[0]);
         }
-        cout << endl;
+        cout << temp << endl;
+        if (uint64_t shout = stoull(temp); repetitions.contains(shout)) {
+            repetitions[shout]++;
+            if (repetitions[shout] == 2024) {
+                cout << (round + 1) * shout;
+                break;
+            }
+        }
+        else repetitions[shout] = 1;
     }
 
     return 0;
