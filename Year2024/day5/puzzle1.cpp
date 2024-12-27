@@ -25,7 +25,7 @@ int year2024_day5_puzzle1() {
 
     cout << "Round  Number" << endl;
     for (int round = 0; round < ROUNDNB; round++) {
-        int clapper = clappers[round % COLUMNNB].front();
+        int clapper = clappers[round % COLUMNNB].front() % (clappers[(round + 1) % COLUMNNB].size() * 2);
         clappers[round % COLUMNNB].erase(clappers[round % COLUMNNB].begin());
         if (clapper > clappers[(round + 1) % COLUMNNB].size()) {
             clappers[(round + 1) % COLUMNNB].insert(clappers[(round + 1) % COLUMNNB].end() - (clapper - 1 - clappers[(round + 1) % COLUMNNB].size()), clapper);
