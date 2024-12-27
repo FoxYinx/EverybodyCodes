@@ -42,7 +42,6 @@ int year2024_day5_puzzle2() {
         for (const auto& c : clappers) {
             temp += to_string(c[0]);
         }
-        cout << temp << endl;
         if (uint64_t shout = stoull(temp); repetitions.contains(shout)) {
             repetitions[shout]++;
             if (repetitions[shout] == 2024) {
