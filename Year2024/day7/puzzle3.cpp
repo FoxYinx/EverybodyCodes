@@ -54,7 +54,7 @@ int year2024_day7_puzzle3() {
     uint64_t enemy = getScore(track, devices["A"]);
     uint64_t ways = 0;
     for (const vector<string>& strategy : getAllStrategies()) {
-        if (getScore(track, strategy) >= enemy) ways++;
+        if (getScore(track, strategy) > enemy) ways++;
     }
 
     cout << ways << endl;
@@ -68,7 +68,7 @@ vector<vector<string>> getAllStrategies() {
     do {
         vector<string> temp;
         for (char & i : s) {
-            temp.emplace_back(&i);
+            temp.emplace_back(1, i);
         }
         strategies.push_back(temp);
     } while (std::next_permutation(s.begin(), s.end()));
@@ -80,7 +80,7 @@ uint64_t getScore(const string& track, const vector<string>& device) {
     uint64_t temp = 10;
     for (int i = 0; i < track.size() * LAPS; i++) {
         const string trackOp(1, track[(i + 1) % track.size()]);
-        const string& racerOp = device[i % device.size()];
+        const string& racerOp = device.at(i % device.size());
         if (trackOp == "S" || trackOp == "=") {
             if (racerOp == "+") {
                 temp++;
@@ -98,6 +98,7 @@ uint64_t getScore(const string& track, const vector<string>& device) {
 }
 
 string getTrack(const string& trackFile) {
+    //fixme: works only with the debugger on
     ifstream fi(trackFile);
     string temp;
     vector<vector<char>> trackChar;
