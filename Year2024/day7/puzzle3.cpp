@@ -6,18 +6,9 @@
 #include <queue>
 #include <array>
 
-#define LAPS 2024
+#define LAPS 11
 
 using namespace std;
-
-struct Node {
-    string name;
-    int value;
-
-    bool operator<(const Node& other) const {
-        return value > other.value;
-    }
-};
 
 struct Pos {
     int x;
@@ -27,6 +18,8 @@ struct Pos {
 constexpr array<pair<int, int>, 4> directions = {{{0, 1}, {1, 0}, {0, -1}, {-1, 0}}};
 
 string getTrack(const string& trackFile);
+uint64_t getScore(const string& track, const vector<string>& device);
+vector<vector<string>> getAllStrategies();
 
 int year2024_day7_puzzle3() {
     ifstream f("ressources/Year2024/day7/part3.txt");
@@ -56,40 +49,52 @@ int year2024_day7_puzzle3() {
         devices[key] = values;
     }
 
-    vector<Node> output;
     string track = getTrack("ressources/Year2024/day7/track.txt");
 
-    cout << track << endl;
-
-    /*for (const auto &[key, value] : devices) {
-        int result = 0;
-        int temp = 10;
-        for (int i = 0; i < track.size() * LAPS; i++) {
-            const string trackOp(1, track[(i + 1) % track.size()]);
-            const string& racerOp = value[i % value.size()];
-            if (trackOp == "S" || trackOp == "=") {
-                if (racerOp == "+") {
-                    temp++;
-                } else if (racerOp == "-") {
-                    if (temp > 0) temp--;
-                }
-            } else if (trackOp == "+") {
-                temp++;
-            } else {
-                if (temp > 0) temp--;
-            }
-            result += temp;
-        }
-        output.emplace_back(key, result);
+    uint64_t enemy = getScore(track, devices["A"]);
+    uint64_t ways = 0;
+    for (const vector<string>& strategy : getAllStrategies()) {
+        if (getScore(track, strategy) >= enemy) ways++;
     }
 
-    sort(output.begin(), output.end());
-
-    for (const auto&[name, _] : output) {
-        cout << name;
-    }*/
-
+    cout << ways << endl;
     return 0;
+}
+
+vector<vector<string>> getAllStrategies() {
+    vector<vector<string>> strategies;
+    string s = "+++++---===";
+    sort(s.begin(), s.end());
+    do {
+        vector<string> temp;
+        for (char & i : s) {
+            temp.emplace_back(&i);
+        }
+        strategies.push_back(temp);
+    } while (std::next_permutation(s.begin(), s.end()));
+    return strategies;
+}
+
+uint64_t getScore(const string& track, const vector<string>& device) {
+    uint64_t result = 0;
+    uint64_t temp = 10;
+    for (int i = 0; i < track.size() * LAPS; i++) {
+        const string trackOp(1, track[(i + 1) % track.size()]);
+        const string& racerOp = device[i % device.size()];
+        if (trackOp == "S" || trackOp == "=") {
+            if (racerOp == "+") {
+                temp++;
+            } else if (racerOp == "-") {
+                if (temp > 0) temp--;
+            }
+        } else if (trackOp == "+") {
+            temp++;
+        } else {
+            if (temp > 0) temp--;
+        }
+        result += temp;
+    }
+    return result;
 }
 
 string getTrack(const string& trackFile) {
