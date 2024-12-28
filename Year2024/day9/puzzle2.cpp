@@ -1,7 +1,12 @@
 #include <fstream>
 #include <iostream>
+#include <limits>
+#include <map>
+#include <vector>
 
 using namespace std;
+
+int findMin(int input, const vector<int>& stamps, map<int, int>& memory);
 
 int year2024_day9_puzzle2() {
     ifstream f("ressources/Year2024/day9/part2.txt");
@@ -13,9 +18,28 @@ int year2024_day9_puzzle2() {
     cout << "File successfully opened!" << endl;
 
     string s;
+    int total = 0;
+    const vector stamps = {30, 25, 24, 20, 16, 15, 10, 5, 3, 1};
     while (getline(f, s)) {
-
+        const int input = stoi(s);
+        map<int, int> memory;
+        total += findMin(input, stamps, memory);
     }
 
+    cout << total << endl;
     return 0;
+}
+
+int findMin(const int input, const vector<int>& stamps, map<int, int>& memory) {
+    if (input == 0) return 0;
+    if (input < 0) return numeric_limits<int>::max();
+    if (memory.contains(input)) return memory[input];
+    int best = numeric_limits<int>::max();
+    for (const int& stamp : stamps) {
+        if (const int sub = findMin(input - stamp, stamps, memory); sub != numeric_limits<int>::max()) {
+            best = min(best, 1 + sub);
+        }
+    }
+    memory[input] = best;
+    return best;
 }
