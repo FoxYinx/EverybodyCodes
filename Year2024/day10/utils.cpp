@@ -11,6 +11,12 @@ char findLetter(const array<array<char, SIZE>, SIZE>& map, const int& y, const i
             if (cr == cc) return cc;
         }
     }
-    cerr << "Failed to find new letter" << endl;
+    cerr << "Failed to find new letter got" << endl;
+    for (const auto& c : map) {
+        for (const auto& d : c) {
+            cerr << d << " ";
+        }
+        cerr << endl;
+    }
     return '.';
 }

@@ -1,6 +1,7 @@
 #include <fstream>
 #include <iostream>
 #include <array>
+#include <vector>
 #include "utils.h"
 
 using namespace std;
@@ -14,28 +15,43 @@ int year2024_day10_puzzle2() {
     }
     cout << "File successfully opened!" << endl;
 
-    array<array<char, SIZE>, SIZE> map = {};
+    vector<array<array<char, SIZE>, SIZE>> map = {};
+    map.emplace_back();
 
     string s;
     int line = 0;
+    int power = 0;
     while (getline(f, s)) {
+        if (s.empty()) {
+            for (auto& m : map) {
+                int pos = 1;
+                for (int y = 0; y < SIZE; y++) {
+                    for (int x = 0; x < SIZE; x++) {
+                        if (m[y][x] == '.') {
+                            const char newLetter = findLetter(m, y, x);
+                            cout << newLetter;
+                            power += (newLetter - '@') * pos;
+                            m[y][x] = newLetter;
+                            pos++;
+                        }
+                    }
+                }
+                cout << endl;
+            }
+            map.clear();
+            map.emplace_back();
+            line++;
+            continue;
+        }
+
         for (int i = 0; i < SIZE; i++) {
-            map[line][i] = s[i];
+            if (s[i] == ' ') {
+                map.resize(map.size() + 1);
+                continue;
+            }
+            map[map.size() - 1][line % (SIZE + 1)][i % (SIZE + 1)] = s[i];
         }
         line++;
-    }
-
-    int power = 0;
-    int pos = 1;
-    for (int y = 0; y < SIZE; y++) {
-        for (int x = 0; x < SIZE; x++) {
-            if (map[y][x] == '.') {
-                const char newLetter = findLetter(map, y, x);
-                power += (newLetter - '@') * pos;
-                map[y][x] = newLetter;
-                pos++;
-            }
-        }
     }
 
     cout << power << endl;
