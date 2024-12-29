@@ -25,11 +25,11 @@ int year2024_day10_puzzle2() {
         if (s.empty()) {
             for (auto& m : map) {
                 int pos = 1;
+                cout << map.size() << endl;
                 for (int y = 0; y < SIZE; y++) {
                     for (int x = 0; x < SIZE; x++) {
                         if (m[y][x] == '.') {
                             const char newLetter = findLetter(m, y, x);
-                            cout << newLetter;
                             power += (newLetter - '@') * pos;
                             m[y][x] = newLetter;
                             pos++;
@@ -44,8 +44,8 @@ int year2024_day10_puzzle2() {
             continue;
         }
 
-        for (int i = 0; i < SIZE; i++) {
-            if (s[i] == ' ') {
+        for (int i = 0; i < s.size(); i++) {
+            if (s[i] == ' ' && line % (SIZE + 1) == 0) {
                 map.resize(map.size() + 1);
                 continue;
             }
