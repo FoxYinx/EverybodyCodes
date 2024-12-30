@@ -25,7 +25,6 @@ int year2024_day10_puzzle2() {
         if (s.empty()) {
             for (auto& m : map) {
                 int pos = 1;
-                cout << map.size() << endl;
                 for (int y = 0; y < SIZE; y++) {
                     for (int x = 0; x < SIZE; x++) {
                         if (m[y][x] == '.') {
@@ -36,7 +35,6 @@ int year2024_day10_puzzle2() {
                         }
                     }
                 }
-                cout << endl;
             }
             map.clear();
             map.emplace_back();
@@ -44,12 +42,15 @@ int year2024_day10_puzzle2() {
             continue;
         }
 
+        int whichmap = 0;
         for (int i = 0; i < s.size(); i++) {
-            if (s[i] == ' ' && line % (SIZE + 1) == 0) {
-                map.resize(map.size() + 1);
-                continue;
+            if (s[i] == ' ') {
+                if (line % (SIZE + 1) == 0) {
+                    map.emplace_back();
+                }
+                whichmap++;
             }
-            map[map.size() - 1][line % (SIZE + 1)][i % (SIZE + 1)] = s[i];
+            map[whichmap][line % (SIZE + 1)][i % (SIZE + 1)] = s[i];
         }
         line++;
     }
