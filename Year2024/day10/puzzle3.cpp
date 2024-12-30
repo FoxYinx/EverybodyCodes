@@ -31,5 +31,12 @@ int year2024_day10_puzzle3() {
         }
     }
 
+    for (const auto& row : map) {
+        for (const auto& elem : row) {
+            cout << elem << ' ';
+        }
+        cout << endl;
+    }
+
     return 0;
 }
