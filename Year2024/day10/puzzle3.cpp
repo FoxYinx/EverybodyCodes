@@ -1,6 +1,5 @@
 #include <fstream>
 #include <iostream>
-#include <array>
 #include <vector>
 #include "utils.h"
 
@@ -15,46 +14,22 @@ int year2024_day10_puzzle3() {
     }
     cout << "File successfully opened!" << endl;
 
-    vector<array<array<char, SIZE>, SIZE>> map = {};
-    map.emplace_back();
+    vector map(BIGSIZE, vector(BIGSIZE, ' '));
 
     string s;
     int line = 0;
-    int power = 0;
     while (getline(f, s)) {
-        if (s.empty()) {
-            for (auto& m : map) {
-                int pos = 1;
-                for (int y = 0; y < SIZE; y++) {
-                    for (int x = 0; x < SIZE; x++) {
-                        if (m[y][x] == '.') {
-                            const char newLetter = findLetter(m, y, x);
-                            power += (newLetter - '@') * pos;
-                            m[y][x] = newLetter;
-                            pos++;
-                        }
-                    }
-                }
-            }
-            map.clear();
-            map.emplace_back();
-            line++;
-            continue;
-        }
-
-        int whichmap = 0;
-        for (int i = 0; i < s.size(); i++) {
-            if (s[i] == ' ') {
-                if (line % (SIZE + 1) == 0) {
-                    map.emplace_back();
-                }
-                whichmap++;
-            }
-            map[whichmap][line % (SIZE + 1)][i % (SIZE + 1)] = s[i];
+        for (int i = 0; i < BIGSIZE; i++) {
+            map[line][i] = s[i];
         }
         line++;
     }
 
-    cout << power << endl;
+    for (int i = 0; i < BIGSIZE - 2; i += 6) {
+        for (int j = 0; j < BIGSIZE - 2; j += 6) {
+            cout << trytoSolve(map, i, j) << endl;
+        }
+    }
+
     return 0;
 }
