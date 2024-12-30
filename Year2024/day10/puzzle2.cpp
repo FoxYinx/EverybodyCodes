@@ -6,6 +6,7 @@
 
 using namespace std;
 
+//You need to add two empty lines at the end of your file input for the program to work
 int year2024_day10_puzzle2() {
     ifstream f("ressources/Year2024/day10/part2.txt");
 
@@ -23,7 +24,6 @@ int year2024_day10_puzzle2() {
     int power = 0;
     while (getline(f, s)) {
         if (s.empty()) {
-            cout << map.size() << endl;
             for (auto& m : map) {
                 int pos = 1;
                 for (int y = 0; y < SIZE; y++) {
