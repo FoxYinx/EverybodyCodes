@@ -29,3 +29,26 @@ bool checkIfHit(Pos start, const int& power, const Pos& end) {
     return false;
 }
 
+bool checkIfHitMeteor(Pos start, const int& power, Pos meteor) {
+    for (int j = 0; j < power; j++) {
+        start.x++;
+        start.y++;
+        meteor.x--;
+        meteor.y--;
+        if (start == meteor) return true;
+    }
+    for (int j = 0; j < power; j++) {
+        start.x++;
+        meteor.x--;
+        meteor.y--;
+        if (start == meteor) return true;
+    }
+    while (start.y <= meteor.x) {
+        start.x++;
+        start.y--;
+        meteor.x--;
+        meteor.y--;
+        if (start == meteor) return true;
+    }
+    return false;
+}

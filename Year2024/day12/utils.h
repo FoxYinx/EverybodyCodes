@@ -12,5 +12,6 @@ struct Pos {
 };
 
 bool checkIfHit(Pos start, const int& power, const Pos& end);
+bool checkIfHitMeteor(Pos start, const int& power, Pos meteor);
 
 #endif //UTILS_H
