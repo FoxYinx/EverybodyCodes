@@ -2,14 +2,14 @@
 #include <fstream>
 #include <iostream>
 #include <map>
-#include <ranges>
 #include <regex>
 #include "utils.h"
 
-#define HEIGHT 8
-#define LENGTH 22
+#define MAXPOWER 10000
 
 using namespace std;
+
+uint64_t findSmallest(const Pos& pos, const map<char, Pos>& catapultes);
 
 int year2024_day12_puzzle3() {
     ifstream f("ressources/Year2024/day12/part3.txt");
@@ -38,16 +38,24 @@ int year2024_day12_puzzle3() {
     uint64_t totalPower = 0;
 
     for (Pos pos : meteors) {
-        for (int power = 1; power < LENGTH / 2; power++) {
-            for (const auto &[key, value] : catapultes) {
-                if (checkIfHitMeteor(value, power, pos)) {
-                    cout << key << " hits a meteor with power (" << power << ")" << endl;
-                    totalPower += power * (key - '@');
-                }
-            }
-        }
+        totalPower += findSmallest(pos, catapultes);
     }
 
     cout << totalPower << endl;
     return 0;
+}
+
+uint64_t findSmallest(const Pos& pos, const map<char, Pos>& catapultes) {
+    uint64_t smallest = UINT64_MAX;
+    //cout << "meteor (" << pos.x << ", " << pos.y << ")" << endl;
+    for (int power = 1; power <= MAXPOWER; power++) {
+        for (const auto &[key, value] : catapultes) {
+            if (checkIfHitMeteor(value, power, pos)) {
+                //cout << key << " hits a meteor with power (" << power << ")" << endl;
+                if (smallest > power * (key - '@')) smallest = power * (key - '@');
+            }
+        }
+    }
+    if (smallest == UINT64_MAX) smallest = findSmallest({pos.x - 1, pos.y - 1}, catapultes);
+    return smallest;
 }

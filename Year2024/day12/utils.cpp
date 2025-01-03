@@ -43,7 +43,7 @@ bool checkIfHitMeteor(Pos start, const int& power, Pos meteor) {
         meteor.y--;
         if (start == meteor) return true;
     }
-    while (start.y <= meteor.x) {
+    while (start.x <= meteor.x && start.y >= 0) {
         start.x++;
         start.y--;
         meteor.x--;
