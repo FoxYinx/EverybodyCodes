@@ -1,6 +1,7 @@
 #include <fstream>
 #include <iostream>
 #include <regex>
+#include <ranges>
 #include <vector>
 
 #define ITER 4
@@ -8,6 +9,7 @@
 using namespace std;
 
 map<string, int> evol(const map<string, int>& termites, const map<string, vector<string>>& evolution);
+int runFullEvolution(const int& iter, const map<string, vector<string>>& evolution, const string& starting);
 
 int year2024_day11_puzzle1() {
     ifstream f("ressources/Year2024/day11/part1.txt");
@@ -37,28 +39,32 @@ int year2024_day11_puzzle1() {
         evolution[key] = temp;
     }
 
-    map<string, int> termites;
-    termites["A"] = 1;
-
-    for (int i = 0; i < ITER; i++) {
-        termites = evol(termites, evolution);
-    }
-
-    int population = 0;
-    for (const auto &[_, value] : termites) {
-        population += value;
-    }
-
+    int population = runFullEvolution(ITER, evolution, "A");
     cout << population << endl;
     return 0;
 }
 
 map<string, int> evol(const map<string, int>& termites, const map<string, vector<string>>& evolution) {
     map<string, int> output;
-    for (const auto &[key, value] : termites) {
+    for (const string &key: termites | views::keys) {
         for (const string& toEvolve : evolution.at(key)) {
             output[toEvolve] += termites.at(key);
         }
     }
     return output;
+}
+
+int runFullEvolution(const int& iter, const map<string, vector<string>>& evolution, const string& starting) {
+    map<string, int> termites;
+    termites[starting] = 1;
+
+    for (int i = 0; i < iter; i++) {
+        termites = evol(termites, evolution);
+    }
+
+    int population = 0;
+    for (const int &value: termites | views::values) {
+        population += value;
+    }
+    return population;
 }
