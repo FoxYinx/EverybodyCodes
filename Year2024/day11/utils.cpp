@@ -1,8 +1,8 @@
 #include <ranges>
 #include "utils.h"
 
-map<string, int> evol(const map<string, int>& termites, const map<string, vector<string>>& evolution) {
-    map<string, int> output;
+map<string, uint64_t> evol(const map<string, uint64_t>& termites, const map<string, vector<string>>& evolution) {
+    map<string, uint64_t> output;
     for (const string &key: termites | views::keys) {
         for (const string& toEvolve : evolution.at(key)) {
             output[toEvolve] += termites.at(key);
@@ -11,16 +11,16 @@ map<string, int> evol(const map<string, int>& termites, const map<string, vector
     return output;
 }
 
-int runFullEvolution(const int& iter, const map<string, vector<string>>& evolution, const string& starting) {
-    map<string, int> termites;
+uint64_t runFullEvolution(const int& iter, const map<string, vector<string>>& evolution, const string& starting) {
+    map<string, uint64_t> termites;
     termites[starting] = 1;
 
     for (int i = 0; i < iter; i++) {
         termites = evol(termites, evolution);
     }
 
-    int population = 0;
-    for (const int &value: termites | views::values) {
+    uint64_t population = 0;
+    for (const uint64_t &value: termites | views::values) {
         population += value;
     }
     return population;
