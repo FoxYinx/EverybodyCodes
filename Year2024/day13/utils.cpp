@@ -21,7 +21,7 @@ uint64_t dijkstra(const vector<vector<Node>>& map, const Node& start) {
         for (const auto &[dx, dy]: directions) {
             const int nx = node.x + dx;
             const int ny = node.y + dy;
-            if (nx >= 0 && nx < map[0].size() && ny >= 0 && ny < map.size() && map[ny][nx].value != '#') {
+            if (nx >= 0 && nx < map[0].size() && ny >= 0 && ny < map.size() && map[ny][nx].value != '#' && map[ny][nx].value != 'S') {
                 uint64_t diff = map[ny][nx].dist > map[node.y][node.x].dist ? map[ny][nx].dist - map[node.y][node.x].dist : map[node.y][node.x].dist - map[ny][nx].dist;
                 uint64_t diff2 = map[ny][nx].dist > map[node.y][node.x].dist ? 10 + map[node.y][node.x].dist - map[ny][nx].dist : 10 + map[ny][nx].dist - map[node.y][node.x].dist;
                 uint64_t minimum = min(diff, diff2);
@@ -35,5 +35,5 @@ uint64_t dijkstra(const vector<vector<Node>>& map, const Node& start) {
     }
 
     cerr << "Dijkstra failed!" << endl;
-    return -1;
+    return numeric_limits<uint64_t>::max();
 }
