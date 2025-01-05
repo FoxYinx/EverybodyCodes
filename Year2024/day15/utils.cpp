@@ -1,11 +1,21 @@
 #include <array>
-#include "utils.h"
-
 #include <limits>
 #include <queue>
+#include <algorithm>
+#include <ranges>
+#include <functional>
+#include "utils.h"
+
 
 bool Node::operator>(const Node& other) const {
     return dist > other.dist;
+}
+
+bool Node::operator<(const Node& other) const {
+    if (x != other.x) {
+        return x < other.x;
+    }
+    return y < other.y;
 }
 
 
@@ -27,7 +37,7 @@ int dijkstra(const Node& start, const Node& end, const vector<vector<char>>& map
         for (const auto &[dx, dy] : directions) {
             const int nx = node.x + dx;
             const int ny = node.y + dy;
-            if (nx >= 0 && nx < map[0].size() && ny >= 0 && ny < map.size() && map[ny][nx] != '#' && node.dist + 1 < dist[ny][nx]) {
+            if (nx >= 0 && nx < map[0].size() && ny >= 0 && ny < map.size() && map[ny][nx] != '#' && map[ny][nx] != '~' && node.dist + 1 < dist[ny][nx]) {
                 dist[ny][nx] = node.dist + 1;
                 pq.emplace(nx, ny, dist[ny][nx]);
             }
@@ -35,4 +45,35 @@ int dijkstra(const Node& start, const Node& end, const vector<vector<char>>& map
     }
 
     return -1;
+}
+
+vector<vector<Node>> generatePermutations(const map<char, vector<Node>>& flowers) {
+    vector<vector<Node>> result;
+    vector<Node> current;
+    vector<vector<Node>> allNodes;
+
+    // Collect all vectors of Nodes from the map
+    for (const auto& pair : flowers | views::values) {
+        allNodes.push_back(pair);
+    }
+
+    // Helper function to generate permutations
+    function<void(int)> permute = [&](const int index) {
+        if (index == allNodes.size()) {
+            // Generate all possible orders of the current combination
+            sort(current.begin(), current.end());
+            do {
+                result.push_back(current);
+            } while (next_permutation(current.begin(), current.end()));
+            return;
+        }
+        for (const Node& node : allNodes[index]) {
+            current.push_back(node);
+            permute(index + 1);
+            current.pop_back();
+        }
+    };
+
+    permute(0);
+    return result;
 }
