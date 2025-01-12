@@ -16,7 +16,7 @@ int year2024_day15_puzzle1() {
     cout << "File successfully opened!" << endl;
 
     string s;
-    vector<vector<char>> map;
+    vector<vector<char>> carte;
     vector<Node> flowers;
     Node start = {};
     int line = 0;
@@ -27,13 +27,14 @@ int year2024_day15_puzzle1() {
             if (s[i] == 'H') flowers.emplace_back(i, line);
             if (s[i] == '.' && line == 0) start = {i, 0};
         }
-        map.push_back(temp);
+        carte.push_back(temp);
         line++;
     }
 
     int min = numeric_limits<int>::max();
+    map<pair<Node, Node>, int> memo = {};
     for (const Node& end : flowers) {
-        int dist = dijkstra(start, end, map) * 2;
+        int dist = dijkstra(start, end, carte, memo) * 2;
         if (dist < min) min = dist;
     }
 

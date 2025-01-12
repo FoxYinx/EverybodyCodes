@@ -13,9 +13,10 @@ struct Node {
 
     bool operator>(const Node& other) const;
     bool operator<(const Node& other) const;
+    bool operator==(const Node& other) const;
 };
 
-int dijkstra(const Node& start, const Node& end, const vector<vector<char>>& map);
+int dijkstra(const Node& start, const Node& end, const vector<vector<char>>& carte, map<pair<Node, Node>, int>& memo);
 vector<vector<Node>> generatePermutations(const map<char, vector<Node>>& flowers);
 
 #endif //UTILS_H

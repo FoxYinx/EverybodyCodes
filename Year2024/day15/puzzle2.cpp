@@ -35,16 +35,24 @@ int year2024_day15_puzzle2() {
     vector combinaisons = generatePermutations(flowers);
 
     int min = numeric_limits<int>::max();
+    vector<Node> answer = {};
+    map<pair<Node, Node>, int> memo = {};
     for (vector<Node>& combi : combinaisons) {
         int dist = 0;
         combi.insert(combi.begin(), start);
         combi.insert(combi.end(), start);
         for (int i = 0; i < combi.size() - 1; i++) {
-            dist += dijkstra(combi[i], combi[i + 1], carte);
+            dist += dijkstra(combi[i], combi[i + 1], carte, memo);
         }
-        if (dist < min) min = dist;
+        if (dist < min) {
+            min = dist;
+            answer = combi;
+        }
     }
 
     cout << min << endl;
+    for (const Node& node : answer) {
+        cout << "(y = " << node.y << ", x = " << node.x << "): " << carte[node.y][node.x] << endl;
+    }
     return 0;
 }

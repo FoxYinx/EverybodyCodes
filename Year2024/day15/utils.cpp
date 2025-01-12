@@ -18,11 +18,16 @@ bool Node::operator<(const Node& other) const {
     return y < other.y;
 }
 
+bool Node::operator==(const Node& other) const {
+    return x == other.x && y == other.y;
+}
 
-int dijkstra(const Node& start, const Node& end, const vector<vector<char>>& map) {
+
+int dijkstra(const Node& start, const Node& end, const vector<vector<char>>& carte, map<pair<Node, Node>, int>& memo) {
+    if (memo.contains({start, end})) return memo[{start, end}];
     constexpr array<pair<int, int>, 4> directions = {{{0, 1}, {1, 0}, {0, -1}, {-1, 0}}};
 
-    vector dist(map.size(), vector(map[0].size(), numeric_limits<int>::max()));
+    vector dist(carte.size(), vector(carte[0].size(), numeric_limits<int>::max()));
 
     priority_queue<Node, vector<Node>, greater<>> pq;
     pq.push(start);
@@ -32,12 +37,15 @@ int dijkstra(const Node& start, const Node& end, const vector<vector<char>>& map
         Node node = pq.top();
         pq.pop();
 
-        if (node.x == end.x && node.y == end.y) return node.dist;
+        if (node.x == end.x && node.y == end.y) {
+            memo[{start, end}] = node.dist;
+            return node.dist;
+        }
 
         for (const auto &[dx, dy] : directions) {
             const int nx = node.x + dx;
             const int ny = node.y + dy;
-            if (nx >= 0 && nx < map[0].size() && ny >= 0 && ny < map.size() && map[ny][nx] != '#' && map[ny][nx] != '~' && node.dist + 1 < dist[ny][nx]) {
+            if (nx >= 0 && nx < carte[0].size() && ny >= 0 && ny < carte.size() && carte[ny][nx] != '#' && carte[ny][nx] != '~' && node.dist + 1 < dist[ny][nx]) {
                 dist[ny][nx] = node.dist + 1;
                 pq.emplace(nx, ny, dist[ny][nx]);
             }
