@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <map>
+#include <functional>
 
 using namespace std;
 
@@ -17,6 +18,6 @@ struct Node {
 };
 
 int dijkstra(const Node& start, const Node& end, const vector<vector<char>>& carte, map<pair<Node, Node>, int>& memo);
-vector<vector<Node>> generatePermutations(const map<char, vector<Node>>& flowers);
+void generatePermutations(const map<char, vector<Node>>& flowers, function<void(const vector<Node>&)> callback);
 
 #endif //UTILS_H

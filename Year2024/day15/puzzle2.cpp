@@ -32,27 +32,42 @@ int year2024_day15_puzzle2() {
         line++;
     }
 
-    vector combinaisons = generatePermutations(flowers);
-
     int min = numeric_limits<int>::max();
     vector<Node> answer = {};
     map<pair<Node, Node>, int> memo = {};
-    for (vector<Node>& combi : combinaisons) {
-        int dist = 0;
-        combi.insert(combi.begin(), start);
-        combi.insert(combi.end(), start);
-        for (int i = 0; i < combi.size() - 1; i++) {
-            dist += dijkstra(combi[i], combi[i + 1], carte, memo);
-        }
-        if (dist < min) {
-            min = dist;
-            answer = combi;
-        }
-    }
 
-    cout << min << endl;
+
+    auto processPermutation = [&](const vector<Node>& combi) {
+        int dist = 0;
+        vector<Node> tempCombi = combi;
+        tempCombi.insert(tempCombi.begin(), start);
+        tempCombi.insert(tempCombi.end(), start);
+
+        bool toContinue = false;
+        for (int i = 0; i < tempCombi.size() - 1; i++) {
+            if (tempCombi[i] == tempCombi[i + 1]) {
+                toContinue = true;
+                break;
+            }
+        }
+        if (!toContinue) {
+            for (int i = 0; i < tempCombi.size() - 1; i++) {
+                dist += dijkstra(tempCombi[i], tempCombi[i + 1], carte, memo);
+            }
+            if (dist < min) {
+                min = dist;
+                answer = tempCombi;
+            }
+        }
+    };
+
+    generatePermutations(flowers, processPermutation);
+
+    cout << "Min = " << min << endl;
     for (const Node& node : answer) {
         cout << "(y = " << node.y << ", x = " << node.x << "): " << carte[node.y][node.x] << endl;
     }
+    cout << "------------------" << endl;
+
     return 0;
 }
