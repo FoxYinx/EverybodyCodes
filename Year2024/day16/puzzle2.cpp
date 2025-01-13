@@ -1,9 +1,12 @@
 #include <fstream>
 #include <iostream>
+#include <numeric>
 #include <regex>
 #include <ranges>
 
 using namespace std;
+
+int multiLcm(const vector<int>& values);
 
 int year2024_day16_puzzle2() {
     ifstream f("ressources/Year2024/day16/part2.txt");
@@ -42,15 +45,33 @@ int year2024_day16_puzzle2() {
         pos[key] = 0;
     }
 
-    for (uint64_t i = 1; i <= 202420242024; i++) {
+    int ppcmValue = multiLcm(nbRotations);
+    uint64_t coeff = 202420242024 / static_cast<uint64_t>(ppcmValue);
+    uint64_t nbCoins = 0;
+
+    for (uint64_t i = 1; i <= 15; i++) {
+        map<char, int> nbSymbols;
         for (auto &[key, value] : pos) {
             pos[key] = (value + nbRotations[key]) % slotMachine[key].size();
         }
+        for (auto &[key, value] : slotMachine) {
+            nbSymbols[value[pos[key]][0]]++;
+            nbSymbols[value[pos[key]][2]]++;
+        }
+        for (const int& i : nbSymbols | views::values) {
+            if (i >= 3) nbCoins += i - 2;
+        }
+
+        cout << "i=" << i << " , nbCoins=" << nbCoins << endl;
     }
 
-    for (auto &[key, value] : slotMachine) {
-        cout << value[pos[key]] << " ";
-    }
+    cout << nbCoins * coeff << endl;
 
     return 0;
+}
+
+int multiLcm(const vector<int>& values) {
+    return accumulate(values.begin(), values.end(), 1, [](const int& a, const int& b) {
+        return lcm(a, b);
+    });
 }
