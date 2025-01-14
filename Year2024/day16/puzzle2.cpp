@@ -6,7 +6,7 @@
 
 using namespace std;
 
-int multiLcm(const vector<int>& values);
+uint64_t multiLcm(const map<int, vector<string>>& slotMachine);
 
 int year2024_day16_puzzle2() {
     ifstream f("ressources/Year2024/day16/part2.txt");
@@ -20,7 +20,7 @@ int year2024_day16_puzzle2() {
     string s;
     smatch sm;
     const regex regexp1(R"((\d+))");
-    const regex regexp2(R"(([*^><-][_.:,][><*-^]| {4}))");
+    const regex regexp2(R"((\w{3}|[^ \t\n\r\f\v]{3}|[ ]{4}))");
 
     vector<int> nbRotations;
     getline(f, s);
@@ -45,33 +45,52 @@ int year2024_day16_puzzle2() {
         pos[key] = 0;
     }
 
-    int ppcmValue = multiLcm(nbRotations);
-    uint64_t coeff = 202420242024 / static_cast<uint64_t>(ppcmValue);
+    uint64_t ppcmValue = multiLcm(slotMachine);
+    cout << "ppcmValue:" << ppcmValue << endl;
+    uint64_t coeff = static_cast<uint64_t>(202420242024) / ppcmValue;
+    uint64_t missingTurns = static_cast<uint64_t>(202420242024) % ppcmValue;
     uint64_t nbCoins = 0;
 
-    for (uint64_t i = 1; i <= 15; i++) {
+    for (uint64_t i = 1; i <= ppcmValue; i++) {
         map<char, int> nbSymbols;
-        for (auto &[key, value] : pos) {
-            pos[key] = (value + nbRotations[key]) % slotMachine[key].size();
-        }
         for (auto &[key, value] : slotMachine) {
             nbSymbols[value[pos[key]][0]]++;
             nbSymbols[value[pos[key]][2]]++;
         }
-        for (const int& i : nbSymbols | views::values) {
-            if (i >= 3) nbCoins += i - 2;
+        for (const int& i1 : nbSymbols | views::values) {
+            if (i1 >= 3) nbCoins += i1 - 2;
         }
 
-        cout << "i=" << i << " , nbCoins=" << nbCoins << endl;
+        for (auto &[key, value] : pos) {
+            pos[key] = (value + nbRotations[key]) % slotMachine[key].size();
+        }
     }
 
-    cout << nbCoins * coeff << endl;
+    uint64_t total = nbCoins * coeff;
+
+    for (uint64_t i = 1; i <= missingTurns; i++) {
+        for (auto &[key, value] : pos) {
+            pos[key] = (value + nbRotations[key]) % slotMachine[key].size();
+        }
+
+        map<char, int> nbSymbols;
+        for (auto &[key, value] : slotMachine) {
+            nbSymbols[value[pos[key]][0]]++;
+            nbSymbols[value[pos[key]][2]]++;
+        }
+        for (const int& i1 : nbSymbols | views::values) {
+            if (i1 >= 3) total += i1 - 2;
+        }
+    }
+
+    cout << "202420242024 = " << coeff << " * " << ppcmValue << " + " << missingTurns << endl;
+    cout << "nbCoins: " << total << endl;
 
     return 0;
 }
 
-int multiLcm(const vector<int>& values) {
-    return accumulate(values.begin(), values.end(), 1, [](const int& a, const int& b) {
-        return lcm(a, b);
+uint64_t multiLcm(const map<int, vector<string>>& slotMachine) {
+    return accumulate(slotMachine.begin(), slotMachine.end(), 1, [](uint64_t acc, const auto& pair) {
+        return lcm(acc, pair.second.size());
     });
 }
