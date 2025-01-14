@@ -6,7 +6,7 @@
 
 using namespace std;
 
-uint64_t multiLcm(const map<int, vector<string>>& slotMachine);
+//uint64_t multiLcm(const map<int, vector<string>>& slotMachine);
 
 int year2024_day16_puzzle3() {
     ifstream f("ressources/Year2024/day16/part3.txt");
@@ -17,7 +17,7 @@ int year2024_day16_puzzle3() {
     }
     cout << "File successfully opened!" << endl;
 
-    string s;
+    /*string s;
     smatch sm;
     const regex regexp1(R"((\d+))");
     const regex regexp2(R"((\w{3}|[^ \t\n\r\f\v]{3}|[ ]{4}))");
@@ -84,13 +84,13 @@ int year2024_day16_puzzle3() {
     }
 
     cout << "202420242024 = " << coeff << " * " << ppcmValue << " + " << missingTurns << endl;
-    cout << "nbCoins: " << total << endl;
+    cout << "nbCoins: " << total << endl;*/
 
     return 0;
 }
 
-uint64_t multiLcm(const map<int, vector<string>>& slotMachine) {
+/*uint64_t multiLcm(const map<int, vector<string>>& slotMachine) {
     return accumulate(slotMachine.begin(), slotMachine.end(), 1, [](uint64_t acc, const auto& pair) {
         return lcm(acc, pair.second.size());
     });
-}
+}*/
