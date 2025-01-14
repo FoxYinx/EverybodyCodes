@@ -1,5 +1,6 @@
 #ifndef UTILS_H
 #define UTILS_H
+#include <tuple>
 
 using namespace std;
 
@@ -7,7 +8,9 @@ struct Pos {
     int x;
     int y;
 
-    bool operator<(const Pos& other) const;
+    bool operator<(const Pos& other) const {
+        return tie(x, y) < tie(other.x, other.y);
+    }
     bool operator==(const Pos& other) const;
 };
 

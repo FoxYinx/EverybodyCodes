@@ -1,12 +1,5 @@
 #include "utils.h"
 
-bool Pos::operator<(const Pos& other) const {
-    if (x != other.x) {
-        return x < other.x;
-    }
-    return y > other.y;
-}
-
 bool Pos::operator==(const Pos& other) const {
     return x == other.x && y == other.y;
 }
